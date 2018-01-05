@@ -2,6 +2,7 @@
 
 The data folder contains an example dataset from [The Movie Database](https://www.themoviedb.org).
 
+It is in the format required by [connect-api-mocker](https://www.npmjs.com/package/connect-api-mocker).
 
 ## Image URLs
 
@@ -33,7 +34,7 @@ Create a `.env` file in the root folder with the following content:
 
     TMDB_KEY=<your api key>
     
-Install the python dependencies
+Install the python dependencies (Requires Python >= 3.5)
 
     pip install -r requirements.txt
     

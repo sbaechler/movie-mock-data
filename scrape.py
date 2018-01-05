@@ -1,5 +1,6 @@
 import json
 import os
+import pathlib
 import tmdbsimple as tmdb
 from dotenv import load_dotenv, find_dotenv
 import time
@@ -12,14 +13,21 @@ tmdb.API_KEY = os.environ.get('TMDB_KEY')
 discover = tmdb.Discover()
 popular_movies = discover.movie(sort_by='popularity.desc')
 
-with open('data/movies.json', 'w') as f:
-    json.dump(popular_movies, f)
+movies_path = pathlib.Path('./data/movies')
+movies_path.mkdir(parents=True, exist_ok=True)
+
+(movies_path / 'GET.json').write_text(json.dumps(popular_movies))
+
 
 genres = tmdb.Genres()
 all_genres = genres.movie_list()
 
-with open('data/genres.json', 'w') as f:
-    json.dump(all_genres, f)
+genres_path = pathlib.Path('./data/genres')
+
+genres_path.mkdir(parents=True, exist_ok=True)
+
+(genres_path / 'GET.json').write_text(json.dumps(all_genres))
+
 
 for result in popular_movies['results']:
     if (result['id']):
@@ -28,7 +36,8 @@ for result in popular_movies['results']:
         info = movie.info()
         images = movie.images()
         reviews = movie.reviews()
-        detail_path = 'data/movies/{}.json'.format(movie.id)
+        detail_path = pathlib.Path('./data/movies/{}'.format(movie.id))
+        detail_path.mkdir(parents=True, exist_ok=True)
 
         details = {
             'info': info,
@@ -36,7 +45,6 @@ for result in popular_movies['results']:
             'reviews': reviews['results'],
         }
 
-        with open(detail_path, 'w') as f:
-           json.dump(details, f)
+        (detail_path / 'GET.json').write_text(json.dumps(details))
 
     time.sleep(1)  # second
